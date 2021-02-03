@@ -33,10 +33,6 @@ module.exports = {
         exclude: /node_modules/,
         use: ["babel-loader"],
       },
-      // {
-      //   test: /\.html$/i,
-      //   use: ["html-loader"],
-      // },
     ],
   },
 };
