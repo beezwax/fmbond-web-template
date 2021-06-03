@@ -1,9 +1,14 @@
 /* --------------------------- Instance Methods (Public) ------------------------------------ */
 
 function FMBond(options = {}) {
-  if (arguments.length === 2) {
-    return FMBond._handleCallbackFromFM(arguments[1]);
+  /* Special handling for calls from FileMaker */
+  const argArray = Array.from(arguments);
+  if (typeof argArray[0] === "string" && argArray[0].length) {
+    return FMBond._handleJSCallFromFM(argArray[0], argArray.slice(1));
+  } else if (argArray.length === 2) {
+    return FMBond._handleCallbackFromFM(argArray[1]);
   }
+  /* Handling for missed 'new' keyword */
   if (!(this instanceof FMBond)) {
     return new FMBond(options);
   }
@@ -12,6 +17,9 @@ function FMBond(options = {}) {
   }
   this.options = { ...FMBond._defaultOptions, ...options };
   FMBond._webViewerName = options.webViewerName || FMBond._webViewerName;
+  FMBond.getWebViewerName = function () {
+    return FMBond._webViewerName;
+  };
   return this;
 }
 
@@ -87,10 +95,18 @@ FMBond.prototype.performScript = function (
   if (typeof FileMaker !== "undefined") {
     FMBond._performScriptHandler(filemakerParameters);
   } else {
+    const objectTimeout = 100;
+    const startTime = new Date().getTime();
     const interval = setInterval(function () {
       if (typeof FileMaker !== "undefined") {
         clearInterval(interval);
         FMBond._performScriptHandler(filemakerParameters);
+      } else if (new Date().getTime() - objectTimeout > startTime) {
+        clearInterval(interval);
+        FMBond._handleRejection(
+          callbackUUID,
+          FMBond.ERROR(-9, "FileMaker object not found")
+        );
       }
     }, 1);
   }
@@ -436,6 +452,48 @@ FMBond._handleCleanup = function (callbackUUID) {
   }
 };
 
+/* Handles calls directly from FileMaker to the web viewer using the 'Perform JavaScript in Web Viewer' script step */
+FMBond._handleJSCallFromFM = function (functionName, functionArgArray = []) {
+  let thisFunction = null;
+  try {
+    if (functionName.indexOf("{") !== -1 || functionName.indexOf("=>") !== -1) {
+      thisFunction = new Function("return " + functionName)();
+    } else {
+      thisFunction = eval(functionName);
+    }
+  } catch (e) {}
+  if (typeof thisFunction !== "function") {
+    throw FMBond.ERROR(
+      -10,
+      "The function '" +
+        functionName +
+        "' is missing from the global scope." +
+        " The Perform Javascript in Web Viewer script step must have " +
+        "the first parameter as the name of the function you wish to call."
+    );
+  }
+  const formattedArgArray = functionArgArray.map((arg) => {
+    let newArg = arg;
+    try {
+      if (newArg[0] === "ƒ") {
+        newArg = new Function("return " + newArg.slice(1))();
+      } else {
+        newArg = JSON.parse(arg);
+      }
+    } catch (e) {}
+    return newArg;
+  });
+  const params = {
+    type: "FM_JS",
+    result: thisFunction(...formattedArgArray),
+  };
+  FileMaker.PerformScriptWithOption(
+    FMBond._defaultOptions.relayScript,
+    JSON.stringify(params),
+    FMBond.INTERRUPT
+  );
+};
+
 /*
  * Error Handling
  */
@@ -481,9 +539,4 @@ FMBond.DEFERRED = function () {
   );
 };
 
-// Pull FMBond to the window-level for callbacks from FileMaker to work.
-if (typeof window !== "undefined") {
-  window.FMBond = FMBond;
-}
-
-export default FMBond;
+module.exports = FMBond;
