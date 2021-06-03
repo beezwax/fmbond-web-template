@@ -539,4 +539,4 @@ FMBond.DEFERRED = function () {
   );
 };
 
-module.exports = FMBond;
+export default FMBond;
