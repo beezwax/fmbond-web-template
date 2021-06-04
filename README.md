@@ -6,4 +6,8 @@
 ```
 git clone https://github.com/beezwax/fmbond-starter.git .
 git remote rm origin
+rm -rf .git
+git init
+git add .
+git commit -m "Initial commit"
 ```
