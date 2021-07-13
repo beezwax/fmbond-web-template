@@ -105,7 +105,7 @@ FMBond.prototype.performScript = function (
         clearInterval(interval);
         FMBond._handleRejection(
           callbackUUID,
-          FMBond.ERROR(-9, "FileMaker object not found")
+          FMBond.ERROR("-9", "FileMaker object not found")
         );
       }
     }, 1);
@@ -193,6 +193,20 @@ FMBond.RegisterScript = function (pluginOptions) {
   };
 
   return this;
+};
+
+/* Set the web viewer name from FileMaker */
+FMBond.setWebViewerNameFromFm = function () {
+  if (FMBond.getWebViewerName()) {
+    return Promise.resolve();
+  }
+  const params = {
+    type: "WEB_VIEWER_NAME",
+  };
+  return FMBond.performScript(
+    FMBond._defaultOptions.relayScript,
+    JSON.stringify(params)
+  );
 };
 
 /* --------------------------- Class Properties / Methods (Public/Private) ------------------------------------ */
@@ -454,6 +468,7 @@ FMBond._handleCleanup = function (callbackUUID) {
 
 /* Handles calls directly from FileMaker to the web viewer using the 'Perform JavaScript in Web Viewer' script step */
 FMBond._handleJSCallFromFM = function (functionName, functionArgArray = []) {
+  const result = new FMBond.ERROR();
   let thisFunction = null;
   try {
     if (functionName.indexOf("{") !== -1 || functionName.indexOf("=>") !== -1) {
@@ -463,29 +478,35 @@ FMBond._handleJSCallFromFM = function (functionName, functionArgArray = []) {
     }
   } catch (e) {}
   if (typeof thisFunction !== "function") {
-    throw FMBond.ERROR(
-      -10,
+    result.messages[0].code = "5";
+    result.messages[0].message =
       "The function '" +
-        functionName +
-        "' is missing from the global scope." +
-        " The Perform Javascript in Web Viewer script step must have " +
-        "the first parameter as the name of the function you wish to call."
-    );
-  }
-  const formattedArgArray = functionArgArray.map((arg) => {
-    let newArg = arg;
+      functionName +
+      "' is missing from the global scope." +
+      " The Perform Javascript in Web Viewer script step must have " +
+      "the first parameter as the name of the function you wish to call.";
+  } else {
+    const formattedArgArray = functionArgArray.map((arg) => {
+      let newArg = arg;
+      try {
+        if (newArg[0] === "ƒ") {
+          newArg = new Function("return " + newArg.slice(1))();
+        } else {
+          newArg = JSON.parse(arg);
+        }
+      } catch (e) {}
+      return newArg;
+    });
     try {
-      if (newArg[0] === "ƒ") {
-        newArg = new Function("return " + newArg.slice(1))();
-      } else {
-        newArg = JSON.parse(arg);
-      }
-    } catch (e) {}
-    return newArg;
-  });
+      result.response.result = thisFunction(...formattedArgArray);
+    } catch (e) {
+      result.messages[0].code = "5";
+      result.messages[0].message = `An unhandled exception occurred in the provided JavaScript function:\n${e.toString()}`;
+    }
+  }
   const params = {
     type: "FM_JS",
-    result: thisFunction(...formattedArgArray),
+    result,
   };
   FileMaker.PerformScriptWithOption(
     FMBond._defaultOptions.relayScript,
@@ -497,15 +518,13 @@ FMBond._handleJSCallFromFM = function (functionName, functionArgArray = []) {
 /*
  * Error Handling
  */
-FMBond.ERROR = function (code, message) {
+FMBond.ERROR = function (code = "0", message = "OK") {
   if (!(this instanceof FMBond.ERROR)) {
     return new FMBond.ERROR(code, message);
   }
   this.response = {};
   this.messages = [];
-  if (code || message) {
-    this.addMessage(code, message);
-  }
+  this.addMessage(code, message);
   return this;
 };
 
