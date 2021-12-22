@@ -1,13 +1,6 @@
-# fmbond-starter
-# How to start a new project from this repository
-1. Create a new folder with the desired project name
-1. Navigate to the new folder on the command line
-1. Run the following commands:
-```
-git clone https://github.com/beezwax/fmbond-starter.git .
-git remote rm origin
-rm -rf .git
-git init
-git add .
-git commit -m "Initial commit"
-```
+# fmbond-web-template
+
+# How to start a new project from this template
+
+1. https://github.com/beezwax/fmbond-web-template
+1. Click the "Use this template" button
