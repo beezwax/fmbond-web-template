@@ -6,6 +6,6 @@ module.exports = merge(common, {
   devtool: "inline-source-map",
   target: ["web", "es5"],
   entry: {
-    entry: ["whatwg-fetch", "core-js/features/promise", "./src/index.js"],
+    entry: ["whatwg-fetch", "core-js/features/promise", "./src/js/index.js"],
   },
 });
