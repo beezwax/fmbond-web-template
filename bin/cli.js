@@ -18,7 +18,7 @@ const installDepsCommand = `cd ${repoName} && npm install`;
 const installFmSuiteCommand = `cd ${repoName} && npm run install_fm_suite ./src/filemaker/${repoName}.fmp12`;
 const clearGitHistoryCommand = `cd ${repoName} && rm -rf .git .gitignore`;
 const initializeGitCommand = String.raw`cd ${repoName} && git init && echo "node_modules\n.DS_Store\n!dist\ndist/*\n!dist/index.html" > .gitignore`;
-const commitGitCommand = `cd ${repoName} && git commit -m "Initial commit"`
+const commitGitCommand = `cd ${repoName} && git add -A && git commit -m "Initial commit"`
 
 console.log(`Creating new project with name ${repoName}`);
 const checkedOut = runCommand(gitCheckoutCommand);
