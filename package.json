@@ -1,13 +1,18 @@
 {
-  "name": "webpack-starter",
+  "name": "@beezwax/create-fmbond-app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": "./bin/cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "install_fm_suite": "node install_fm_suite.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beezwax/fmbond-web-template"
   },
   "keywords": [],
   "author": "= <=> (=)",
