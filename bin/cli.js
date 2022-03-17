@@ -15,7 +15,7 @@ const runCommand = command => {
 const repoName = process.argv[2];
 const gitCheckoutCommand = `git clone --depth 1 https://github.com/beezwax/fmbond-web-template ${repoName}`;
 const installDepsCommand = `cd ${repoName} && npm install`;
-const installFmSuiteCommand = `npm run install_fm_suite ./src/filemaker/${repoName}.fmp12`;
+const installFmSuiteCommand = `cd ${repoName} && npm run install_fm_suite ./src/filemaker/${repoName}.fmp12`;
 
 console.log(`Creating new project with name ${repoName}`);
 const checkedOut = runCommand(gitCheckoutCommand);
@@ -29,7 +29,7 @@ if(!installedDeps) {
   process.exit({code:-1});
 }
 
-console.log(`Creating FileMaker file at ./src/filemaker${repoName}.fmp12`);
+console.log(`Creating FileMaker file at ./src/filemaker/${repoName}.fmp12`);
 const installedFmSuite = runCommand(installFmSuiteCommand);
 if(!installedFmSuite) {
   process.exit({code:-1});
