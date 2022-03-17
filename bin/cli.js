@@ -13,7 +13,7 @@ const runCommand = command => {
 }
 
 const repoName = process.argv[2];
-const gitCheckoutCommand = `git clone --depth 1 https://github.com/beezwax/fmbond-web-template ${reopName}`;
+const gitCheckoutCommand = `git clone --depth 1 https://github.com/beezwax/fmbond-web-template ${repoName}`;
 const installDepsCommand = `cd ${repoName} && npm install`;
 const installFmSuiteCommand = `npm run install_fm_suite ./src/filemaker/${repoName}.fmp12`;
 
