@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --open --config webpack.dev.js",
+    "start_silent": "webpack serve --no-open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "install_fm_suite": "node install_fm_suite.js"
   },
