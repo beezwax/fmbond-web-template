@@ -15,6 +15,7 @@ const args = process.argv.slice(2);
 
 // first arg is destination path
 const destPath = args[0] ? args[0] : "./src/filemaker/fmbond-filemaker-suite.fmp12";
+console.log(destPath);
 
 // second arg is overwrite flag
 const overwrite = !!args[1];
@@ -27,4 +28,5 @@ try {
   console.log("fmbond-filemaker-suite successfully installed!");
 } catch (error) {
   console.log(error);
+  throw error;
 }
