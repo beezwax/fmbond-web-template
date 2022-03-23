@@ -7,7 +7,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: "FMBond Test",
+      title: "FMBond App",
       inject: "body",
     }),
   ],
