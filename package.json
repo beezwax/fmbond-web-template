@@ -23,7 +23,7 @@
     "@babel/plugin-transform-runtime": "^7.12.15",
     "@babel/preset-env": "^7.12.13",
     "@babel/runtime-corejs3": "^7.12.13",
-    "@beezwax/fmbond": "^1.0.1",
+    "@beezwax/fmbond": "^1.1.0",
     "@beezwax/fmbond-filemaker-suite": "^1.0.0",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0",
