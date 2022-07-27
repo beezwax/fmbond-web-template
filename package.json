@@ -9,7 +9,7 @@
     "start": "webpack serve --open --config webpack.dev.js",
     "start_silent": "webpack serve --no-open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "install_fm_suite": "node install_fm_suite.js"
+    "install_fm_suite": "node lib/cli/installFmSuite.js"
   },
   "repository": {
     "type": "git",
@@ -29,8 +29,9 @@
     "clean-webpack-plugin": "^4.0.0",
     "core-js": "^3.10.1",
     "css-loader": "^5.0.1",
+    "find-process": "^1.4.7",
     "html-webpack-plugin": "^5.5.0",
-    "node-fetch": "^3.2.9",
+    "node-fetch": "^2.6.7",
     "open": "^8.4.0",
     "sass": "^1.32.6",
     "sass-loader": "^10.1.1",
