@@ -1,6 +1,6 @@
 {
   "name": "@beezwax/create-fmbond-app",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "bin": "./bin/cli.js",
@@ -9,7 +9,7 @@
     "start": "webpack serve --open --config webpack.dev.js",
     "start_silent": "webpack serve --no-open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "install_fm_suite": "node install_fm_suite.js"
+    "install_fm_suite": "node lib/cli/installFmSuite.js"
   },
   "repository": {
     "type": "git",
@@ -24,12 +24,15 @@
     "@babel/preset-env": "^7.12.13",
     "@babel/runtime-corejs3": "^7.12.13",
     "@beezwax/fmbond": "^1.3.0",
-    "@beezwax/fmbond-filemaker-suite": "^1.1.5",
+    "@beezwax/fmbond-filemaker-suite": "^1.2.4",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0",
     "core-js": "^3.10.1",
     "css-loader": "^5.0.1",
+    "find-process": "^1.4.7",
     "html-webpack-plugin": "^5.5.0",
+    "node-fetch": "^2.6.7",
+    "open": "^8.4.0",
     "sass": "^1.32.6",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
