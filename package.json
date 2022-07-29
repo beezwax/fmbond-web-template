@@ -1,6 +1,6 @@
 {
   "name": "@beezwax/create-fmbond-app",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "",
   "main": "index.js",
   "bin": "./bin/cli.js",
