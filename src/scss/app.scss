@@ -58,6 +58,29 @@ a:visited {
   animation: LogoSpin infinite 5s linear;
 }
 
+.instruction {
+  font-size: 1rem;
+  margin-inline: 0.5rem;
+}
+
+.project-path {
+  font-family: monospace;
+  overflow-wrap: break-word;
+}
+
+.launch-editor {
+  border: solid 1px var(--color);
+  border-radius: 8px;
+  background-color: var(--background-color);
+  color: var(--color);
+  font-size: 1.5rem;
+  width: calc(100% - 1rem);
+  padding-block: 0.5rem;
+  margin-block-start: 1rem;
+  margin-inline: 0.5rem;
+  cursor: pointer;
+}
+
 @keyframes LogoSpin {
   from {
     transform: rotate(0deg);

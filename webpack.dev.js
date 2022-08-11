@@ -14,6 +14,10 @@ module.exports = merge(common, {
       {
         key: "packageName",
         value: packageInfo.name
+      },
+      {
+        key: "projectPath",
+        value: __dirname
       }
     ]
   }

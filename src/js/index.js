@@ -14,7 +14,18 @@ logo.classList.add("logo");
 logo.innerText = "∞";
 
 const instruction = document.createElement("p");
-instruction.innerText = "Edit and save ./src/js/index.js to update this page.";
+instruction.classList.add("instruction");
+const vsCodeButton = document.createElement("button");
+vsCodeButton.innerText = "Edit this project in VS Code";
+vsCodeButton.classList.add("launch-editor");
+fetch(document.location)
+  .then((response) => {
+    instruction.innerHTML = `Don't have VS Code? To update this page edit and save <span class="project-path">${response.headers.get("projectPath")}/src/js/index.js</span>.`;
+    vsCodeButton.addEventListener("click", () => {
+      window.open(`vscode://file/${response.headers.get("projectPath")}/`, '_blank');
+      window.open(`vscode://file/${response.headers.get("projectPath")}/src/js/index.js`, '_blank');
+    });
+  });
 
 const learn = document.createElement("p");
 const learnLink = document.createElement("a");
@@ -27,6 +38,7 @@ main.appendChild(heading);
 main.appendChild(subheading);
 main.appendChild(logo);
 if(window.location.hostname === "localhost") {
+  main.appendChild(vsCodeButton);
   main.appendChild(instruction);
 }
 main.appendChild(learn);
